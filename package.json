@@ -1,0 +1,39 @@
+{
+  "name": "query-search",
+  "version": "0.0.1",
+  "description": "Searches in array by query and returns array of matches",
+  "main": "index.js",
+  "scripts": {
+    "test": "jest"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Lesha-spr/query-search.git"
+  },
+  "keywords": [
+    "query",
+    "search",
+    "match",
+    "query",
+    "schema"
+  ],
+  "author": "Oleksii An",
+  "license": "Apache-2.0",
+  "bugs": {
+    "url": "https://github.com/Lesha-spr/query-search/issues"
+  },
+  "homepage": "https://github.com/Lesha-spr/query-search#readme",
+  "dependencies": {
+    "lodash.isobject": "^3.0.2",
+    "object-sort": "0.0.6"
+  },
+  "devDependencies": {
+    "jest-cli": "^0.9.2"
+  },
+  "jest": {
+    "unmockedModulePathPatterns": [
+      "<rootDir>/node_modules/lodash.isobject",
+      "<rootDir>/node_modules/object-sort"
+    ]
+  }
+}
