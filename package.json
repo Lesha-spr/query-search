@@ -1,6 +1,6 @@
 {
   "name": "query-search",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "Searches in array by query and returns array of matches",
   "main": "index.js",
   "scripts": {
@@ -13,8 +13,9 @@
   "keywords": [
     "query",
     "search",
+    "deep search",
+    "deep find",
     "match",
-    "query",
     "schema"
   ],
   "author": "Oleksii An",
