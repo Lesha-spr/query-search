@@ -24,13 +24,14 @@ module.exports = function(query, schema, collection) {
  * @param schema {Object} schema of non-ignored properties
  * @param collection {Array} to search in
  * @param match {Array} to push in
- * @param key {String} deep inner key
+ * @param deepKeys {Array} deep inner keys
  */
-function rec(query, schema, collection, match, key) {
-    // FIXME: refactor
+function rec(query, schema, collection, match, deepKeys) {
+    var levels = deepKeys && deepKeys.length;
+
     Object.keys(schema).forEach(function(schemaKey) {
-        if (key) {
-            key = key + '.' + schemaKey;
+        if (levels) {
+            deepKeys.push(schemaKey);
         }
 
         Object.keys(query).forEach(function(queryKey) {
@@ -38,27 +39,46 @@ function rec(query, schema, collection, match, key) {
                 match.push.apply(match, collection.filter(function(value) {
                     var compare = value;
 
-                    if (match.indexOf(value) === -1) {
-                        if (key) {
-                            key.split('.').forEach(function(innerKey) {
-                                compare = compare[innerKey];
-                            });
-                        } else {
-                            compare = compare[schemaKey];
-                        }
-
-                        if (isObject(compare)) {
-                            return JSON.stringify(objectSort(compare)) === JSON.stringify(objectSort(query[queryKey]));
-                        }
-
-                        return compare.toString().toLowerCase().indexOf(query[queryKey].toString().toLowerCase()) > -1;
+                    // There is already matched current value
+                    if (match.indexOf(value) !== -1) {
+                        return false;
                     }
 
-                    return false;
+                    compare = getCompareble(levels, deepKeys, schemaKey, compare);
+
+                    if (!compare) {
+                        return false;
+                    }
+
+                    if (isObject(compare)) {
+                        return JSON.stringify(objectSort(compare)) === JSON.stringify(objectSort(query[queryKey]));
+                    }
+
+                    return compare.toString().toLowerCase().indexOf(query[queryKey].toString().toLowerCase()) > -1;
                 }));
 
-                return rec(query[queryKey], schema[schemaKey], collection, match, key || schemaKey);
+                return rec(query[queryKey], schema[schemaKey], collection, match, deepKeys || [schemaKey]);
             }
         });
     });
+}
+
+/**
+ *
+ * @param levels {Boolean}
+ * @param deepKeys {Array}
+ * @param schemaKey
+ * @param compare
+ * @returns {*}
+ */
+function getCompareble(levels, deepKeys, schemaKey, compare) {
+    if (levels) {
+        deepKeys.forEach(function(innerKey) {
+            compare = compare[innerKey];
+        });
+    } else {
+        compare = compare[schemaKey];
+    }
+
+    return compare;
 }
