@@ -1,7 +1,7 @@
 'use strict';
 
-var objectSort = require('object-sort');
 var isObject = require('lodash.isobject');
+var isEqual = require('lodash.isequal');
 
 /**
  *
@@ -51,7 +51,7 @@ function rec(query, schema, collection, match, deepKeys) {
                     }
 
                     if (isObject(compare)) {
-                        return JSON.stringify(objectSort(compare)) === JSON.stringify(objectSort(query[queryKey]));
+                        return isEqual(compare, query[queryKey]);
                     }
 
                     return compare.toString().toLowerCase().indexOf(query[queryKey].toString().toLowerCase()) > -1;

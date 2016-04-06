@@ -52,7 +52,7 @@ var query = {
 var schema = {
     some: {
         nested: {
-            property: true // Saying to compare objects (uses JSON.stringify with object-sort to compare)
+            property: true // Saying to compare objects (uses lodash.isEqual)
         }
     }
 };
